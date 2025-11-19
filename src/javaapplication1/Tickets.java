@@ -34,6 +34,7 @@ public class Tickets extends JFrame implements ActionListener {
     JMenuItem mnuItemOpenTicket;
     JMenuItem mnuItemViewTicket;
     JMenuItem mnuItemDeleteALL;
+    JMenuItem mnuItemDeleteUser;
 
     public Tickets(Boolean isAdmin) {
 
@@ -69,6 +70,11 @@ public class Tickets extends JFrame implements ActionListener {
         // add to Admin main menu item
         mnuAdmin.add(mnuItemDeleteALL);
 
+        // initialize fourth sub menu items for Admin main menu
+        mnuItemDeleteUser = new JMenuItem("Delete User");
+        // add to Admin main menu item
+        mnuAdmin.add(mnuItemDeleteUser);
+
         // initialize first sub menu item for Tickets main menu
         mnuItemOpenTicket = new JMenuItem("Open Ticket");
         // add to Ticket Main menu item
@@ -88,7 +94,7 @@ public class Tickets extends JFrame implements ActionListener {
         mnuItemOpenTicket.addActionListener(this);
         mnuItemViewTicket.addActionListener(this);
         mnuItemDeleteALL.addActionListener(this);
-
+        mnuItemDeleteUser.addActionListener(this);
         /*
          * continue implementing any other desired sub menu items (like
          * for update and delete sub menus for example) with similar
@@ -217,6 +223,25 @@ public class Tickets extends JFrame implements ActionListener {
             if (choice == JOptionPane.YES_OPTION) {
 
                 dao.deleteALLRecords();
+            }
+            else {
+                JOptionPane.showMessageDialog(null, "Deletion canceled.");
+            }
+        }
+
+        // deletion of user with confirmation
+        else if (e.getSource() == mnuItemDeleteUser) {
+            String userId = JOptionPane.showInputDialog(null, "Enter the ID to delete");
+
+            int choice = JOptionPane.showConfirmDialog(
+                    null,
+                    "Are you sure you want to delete ID: " + userId + "?",
+                    "Confirm Deletion",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (choice == JOptionPane.YES_OPTION) {
+                dao.deleteUser(userId);
             }
             else {
                 JOptionPane.showMessageDialog(null, "Deletion canceled.");

@@ -3,11 +3,7 @@ package javaapplication1;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -47,7 +43,7 @@ public class Dao {
         final String createUsersTable =
                 "CREATE TABLE IF NOT EXISTS alin_users (" +
                         "uid INT AUTO_INCREMENT PRIMARY KEY, " +
-                        "username VARCHAR(30), " +
+                        "username VARCHAR(30) UNIQUE, " +
                         "password VARCHAR(30), " +
                         "admin int)";
         try {
@@ -152,7 +148,7 @@ public class Dao {
         }
         return results;
     }
-    // continue coding for updateRecords implementation
+    // updateRecords implementation
     public void updateRecords(int ticketId, String newDescription) {
         try {
             statement = connect.createStatement();
@@ -171,7 +167,7 @@ public class Dao {
         }
     }
 
-    // continue coding for deleteRecords implementation
+    // deleteRecords implementation
     public void deleteRecords(int ticketId) {
         try {
             statement = connect.createStatement();
@@ -190,7 +186,7 @@ public class Dao {
         }
     }
 
-    // continue coding for deleteRecords implementation
+    // deleteALLRecords implementation
     public void deleteALLRecords() {
         try {
             statement = connect.createStatement();
@@ -206,4 +202,26 @@ public class Dao {
             e.printStackTrace();
         }
     }
+
+    // deleteUsers implementation
+    public void deleteUser(String username) {
+        try {
+            statement = connect.createStatement();
+            String sql = "DELETE FROM alin_users WHERE username = ?";
+            try (PreparedStatement ps = connect.prepareStatement(sql)) {
+                ps.setString(1, username);
+                int rowsDeleted = ps.executeUpdate();
+
+                if (rowsDeleted > 0) {
+                    System.out.println("User deleted successfully.");
+                } else {
+                    System.out.println("No User found with ID: " + username);
+                }
+            }
+            statement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
